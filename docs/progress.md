@@ -40,3 +40,7 @@ Seems to me that I need to configure babel to convert ES6 to ES5:
                 }
             }
         ],
+
+
+I see, I have to learn a lot.
+Let's start with `module`, `export`, `import`  and so on in ES6: [found this](http://stackabuse.com/how-to-use-module-exports-in-node-js/)
