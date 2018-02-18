@@ -4,7 +4,7 @@ Log my progress here.
 
 ## idea
 
-based on this [blog-article](https://hackernoon.com/12-cool-things-you-can-do-with-github-f3e0424cf2f0) by david gilbertson
+Was formed when reading this [article on Medium](https://hackernoon.com/12-cool-things-you-can-do-with-github-f3e0424cf2f0) by david gilbertson
 
 I just want to try, if I am capable to write a small website with some simple js, which uses Github as CMS :)
 
@@ -17,3 +17,8 @@ Ok, good tutorial so far to start little and plain.
 We need a [copy-plugin](https://github.com/webpack-contrib/copy-webpack-plugin) to move the `index.html` to the dist-folder.
 
 What about [a dev-server?](https://github.com/webpack/webpack-dev-server)
+
+## javascript??
+
+Foo, I am too stupid to use it correctly. How is it even possible to call a js-Method from inside the DOM?
+Thankfully I found [this SO-Thread](https://stackoverflow.com/questions/34357489/calling-webpacked-code-from-outside-html-script-tag)
