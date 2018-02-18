@@ -22,3 +22,21 @@ What about [a dev-server?](https://github.com/webpack/webpack-dev-server)
 
 Foo, I am too stupid to use it correctly. How is it even possible to call a js-Method from inside the DOM?
 Thankfully I found [this SO-Thread](https://stackoverflow.com/questions/34357489/calling-webpacked-code-from-outside-html-script-tag)
+
+But now the prod-build fails. `ERROR in bundle.js from UglifyJs
+                               Unexpected token: name (Main)`
+
+Seems to me that I need to configure babel to convert ES6 to ES5:
+
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env'],
+                    }
+                }
+            }
+        ],
