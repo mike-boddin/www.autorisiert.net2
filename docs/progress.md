@@ -28,19 +28,88 @@ But now the prod-build fails. `ERROR in bundle.js from UglifyJs
 
 Seems to me that I need to configure babel to convert ES6 to ES5:
 
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /(node_modules)/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env'],
-                    }
+    rules: [
+        {
+            test: /\.js$/,
+            exclude: /(node_modules)/,
+            use: {
+                loader: 'babel-loader',
+                options: {
+                    presets: ['@babel/preset-env'],
                 }
             }
-        ],
+        }
+    ],
 
 
 I see, I have to learn a lot.
 Let's start with `module`, `export`, `import`  and so on in ES6: [found this](http://stackabuse.com/how-to-use-module-exports-in-node-js/)
+
+Here is a much more extensive article about this stuff: [es6-modules-final](http://2ality.com/2014/09/es6-modules-final.html)
+
+## do the styling
+
+As I like bootstrap, I will follow [this guide](https://getbootstrap.com/docs/4.0/getting-started/webpack/) to add it in my project.
+
+I choose the hard way (compile bootstrap-sass on my own), so I need a [custom.scss](https://getbootstrap.com/docs/4.0/getting-started/theming/#importing)
+
+Of course we will have to append our entrypoint in webpack from
+
+    entry: './src/js/index.js',
+
+to
+
+    entry: ['./src/js/index.js', './src/scss/custom.scss'],
+
+
+And don't forget the [ExtractTextPlugin](https://github.com/webpack-contrib/extract-text-webpack-plugin) :) ([see here](https://github.com/JonathanMH/webpack-scss-sass-file))
+
+After some try and error, I will wire this step up: (see this commit #f92f27950574a3cddcb2ff38665df63fa0df050f )
+
+### NPM-packages
+
+    npm i --save bootstrap
+    npm i -D css-loader, extract-text-webpack-plugin, node-sass, postcss-loader, sass-loader
+
+### webpack.config.js
+
+    entry: ['./src/js/index.js', './src/scss/custom.scss'],
+    plugins: [
+        // ...
+        new ExtractTextPlugin("styles.css"),
+    ],
+    // ...
+    rules: [
+        // ...
+        { // sass / scss loader for webpack
+            test: /\.(sass|scss)$/,
+            loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
+        },
+        {
+            test: /\.css$/,
+            use: ["style-loader", "css-loader", "postcss-loader", "sass-loader"]
+        }
+    ]
+
+### postcss.config.js
+
+    module.exports = {
+        plugins: [
+            require('precss'),
+            require('autoprefixer'),
+        ]
+    }
+
+The add the `custom.scss` as stated above.
+And don't forget to append your `index.html` with
+
+    <link rel="stylesheet" type="text/css" href="styles.css" media="screen" />
+
+This took me quite lot of time (about 1 hour or so) but I like the result!
+That is what David Gilbertson means when he talks about the *YAT* :)
+
+> I would like to propose a unit of measure for the construct of ‘JavaScript fatigue’: the YAT.
+>
+> A YAT is Yet Another Thing that you have to think about when you should really be busy writing code.
+
+([source](https://hackernoon.com/its-ok-to-not-use-yarn-f28dc766ef32)) from the great article *"It’s OK to not use Yarn"*
