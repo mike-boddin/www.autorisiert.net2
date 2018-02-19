@@ -64,7 +64,7 @@ to
 
 And don't forget the [ExtractTextPlugin](https://github.com/webpack-contrib/extract-text-webpack-plugin) :) ([see here](https://github.com/JonathanMH/webpack-scss-sass-file))
 
-After some try and error, I will wire this step up: (see this commit #f92f27950574a3cddcb2ff38665df63fa0df050f )
+After some try and error, I will wire this step up: (see this commit f92f27950574a3cddcb2ff38665df63fa0df050f )
 
 ### NPM-packages
 
