@@ -64,7 +64,7 @@ to
 
 And don't forget the [ExtractTextPlugin](https://github.com/webpack-contrib/extract-text-webpack-plugin) :) ([see here](https://github.com/JonathanMH/webpack-scss-sass-file))
 
-After some try and error, I will wire this step up: (see this [commit](https://github.com/mike-boddin/www.autorisiert.net2/commit/f92f27950574a3cddcb2ff38665df63fa0df050f) )
+After some try and error, I will wire this step up: (see this [commit](https://github.com/mike-boddin/www.autorisiert.net2/commit/f92f27950574a3cddcb2ff38665df63fa0df050f))
 
 ### NPM-packages
 
@@ -113,3 +113,18 @@ That is what David Gilbertson means when he talks about the *YAT* :)
 > A YAT is Yet Another Thing that you have to think about when you should really be busy writing code.
 
 ([source](https://hackernoon.com/its-ok-to-not-use-yarn-f28dc766ef32)) from the great article *"It’s OK to not use Yarn"*
+
+## some thoughts
+
+### design-thoughts
+
+readability:
+
+> If you don’t know anything about typography, but care about readability, try this as a starting point:
+>
+> * A minimum of 18px font size
+> * Line spacing of 1.6
+> * \#333 for color or thereabouts
+> * Limit your lines to a width of 700px
+
+(source: [Web fonts: when you need them, when you don’t](https://hackernoon.com/web-fonts-when-you-need-them-when-you-dont-a3b4b39fe0ae)
