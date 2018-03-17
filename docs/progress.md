@@ -90,6 +90,25 @@ After some try and error, I will wire this step up: (see this [commit](https://g
             use: ["style-loader", "css-loader", "postcss-loader", "sass-loader"]
         }
     ]
+    
+So that webpack is evolving constantly, of course there will be more changes during development.
+For example I had to configure dev-server and sourcemaps correctly to make the process flawless for me :-):
+
+    const webpack = require('webpack');
+    
+    module.exports = {
+        devtool: 'inline-source-map',
+        devServer: {
+            contentBase: path.resolve(__dirname, 'dist'),
+            hot: true,
+            // lazy: false,
+            // log: 'debug'
+        },
+        plugins: [
+                /* ... */
+                new webpack.NamedModulesPlugin(),
+                new webpack.HotModuleReplacementPlugin()
+            ],
 
 ### postcss.config.js
 
@@ -128,3 +147,30 @@ readability:
 > * Limit your lines to a width of 700px
 
 (source: [Web fonts: when you need them, when you don’t](https://hackernoon.com/web-fonts-when-you-need-them-when-you-dont-a3b4b39fe0ae)
+
+## Implementation
+
+### Navigation
+
+Idea is to configure the navi via json:
+
+    {
+      "brand": "autorisiert.net",
+      "items": {
+        "home": "home.md"
+      }
+    }
+    
+so that nav-bar is populated on start, based on this config.
+
+I tried to put this in an own module and make it configurable.
+
+    import navi from './navi/navi.js';
+    
+            navi({
+                clickCallback: clickOnNavi, 
+                source: './navconfig.json', 
+                el: window.body
+            }).then(f => f.apply());
+            
+The `navi()`-Function will return a promise, where then you can call the `apply()`-method, which draws the navi to the DOM.

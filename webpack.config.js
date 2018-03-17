@@ -1,13 +1,25 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
 
 const path = require('path');
 
 module.exports = {
+    devtool: 'inline-source-map',
+    devServer: {
+        contentBase: path.resolve(__dirname, 'dist'),
+        hot: true,
+        // lazy: false,
+        // log: 'debug'
+    },
     entry: ['./src/js/index.js', './src/scss/custom.scss'],
     plugins: [
-        new CopyWebpackPlugin([{ from: "src/index.html", to: path.resolve(__dirname, 'dist') }]),
+        new CopyWebpackPlugin([
+            {from: "src/index.html", to: path.resolve(__dirname, 'dist')},
+        ]),
         new ExtractTextPlugin("styles.css"),
+        new webpack.NamedModulesPlugin(),
+        new webpack.HotModuleReplacementPlugin()
     ],
     module: {
         rules: [
@@ -33,6 +45,6 @@ module.exports = {
     },
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist'),
     }
 };
