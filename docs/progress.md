@@ -90,25 +90,6 @@ After some try and error, I will wire this step up: (see this [commit](https://g
             use: ["style-loader", "css-loader", "postcss-loader", "sass-loader"]
         }
     ]
-    
-So that webpack is evolving constantly, of course there will be more changes during development.
-For example I had to configure dev-server and sourcemaps correctly to make the process flawless for me :-):
-
-    const webpack = require('webpack');
-    
-    module.exports = {
-        devtool: 'inline-source-map',
-        devServer: {
-            contentBase: path.resolve(__dirname, 'dist'),
-            hot: true,
-            // lazy: false,
-            // log: 'debug'
-        },
-        plugins: [
-                /* ... */
-                new webpack.NamedModulesPlugin(),
-                new webpack.HotModuleReplacementPlugin()
-            ],
 
 ### postcss.config.js
 
@@ -132,6 +113,27 @@ That is what David Gilbertson means when he talks about the *YAT* :)
 > A YAT is Yet Another Thing that you have to think about when you should really be busy writing code.
 
 ([source](https://hackernoon.com/its-ok-to-not-use-yarn-f28dc766ef32)) from the great article *"It’s OK to not use Yarn"*
+
+## webpack tweaking
+    
+So that webpack is evolving constantly, of course there will be some changes to it during development.
+For example I had to configure dev-server and sourcemaps correctly to make the process flawless for me...
+
+    const webpack = require('webpack');
+    
+    module.exports = {
+        devtool: 'inline-source-map',
+        devServer: {
+            contentBase: path.resolve(__dirname, 'dist'),
+            hot: true,
+            // lazy: false,
+            // log: 'debug'
+        },
+        plugins: [
+                /* ... */
+                new webpack.NamedModulesPlugin(),
+                new webpack.HotModuleReplacementPlugin()
+            ],
 
 ## some thoughts
 
