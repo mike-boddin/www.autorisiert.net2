@@ -2,51 +2,52 @@ import {jsonFetch} from '../tools/fetchr';
 import {htmlToElement} from '../tools/elementr';
 import defaultNavigation from './navigation.json';
 
-let element;
-let navigationConfig;
-let callback;
 
-export default function ({source, el, clickCallback} = {
-    source: '', el: document.body, clickCallback: (clickedItem) => {
+
+
+// would be nice to return a Navigation-Class-Object, which is also registered in `window`
+export class Navigation{
+    "use strict;";
+
+    constructor ({src = '', el = document.body, clickCallback = (clickedItem)=>{}}){
+        this.source = src;
+        this.element = el;
+        this.clickCallBack = clickCallback;
     }
-}) {
-    // noinspection JSAnnotator
-    element = el || document.body;
-    callback = clickCallback || ((clickedItem) => {
-        console.log('click on navi-item', clickedItem)
-    });
-    window.navcallback = callback;
-    const ret = {apply: apply};
 
-    return new Promise(function (resolve, reject) {
-        if (!source) {
-            navigationConfig = defaultNavigation;
-            resolve(ret);
+    async apply(){
+        if (!this.source) {
+            this.navigationConfig = defaultNavigation;
         } else {
-            jsonFetch(source).then(val => {
-                navigationConfig = val;
-                resolve(ret);
-            }, error => {
-                reject(error);
-            });
+            this.navigationConfig = await jsonFetch(source);
         }
-    });
-};
-
-const apply = () => {
-    console.log('apply navigation', navigationConfig);
-    let items = '';
-    for (let key in navigationConfig.items) {
-        const value = navigationConfig.items[key];
-        items += `<a onclick="navcallback('${value}');" class="nav-item nav-link" href="#">${key}</a>`;
+        this._appendToDom();
     }
-    const navEl = htmlToElement(`<nav class="navbar navbar-expand-sm navbar-light bg-light">
-  <a class="navbar-brand" href="/">${navigationConfig.brand}</a>
+
+    _appendToDom() {
+        console.log('apply navigation as class', this.navigationConfig);
+        let items = '';
+        for (let key in this.navigationConfig.items) {
+            const value = this.navigationConfig.items[key];
+            items += `<a data-nav-target="${value}" class="nav-item nav-link" href="#">${key}</a>`;
+        }
+        const navEl = htmlToElement(`
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <a class="navbar-brand" href="/">${this.navigationConfig.brand}</a>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
+    <div class="navbar-nav" >
     ${items}
     </div>
   </div>
 </nav>`);
-    element.appendChild(navEl);
-};
+        for(let child in navEl.childNodes){
+            console.log('child', navEl.childNodes[child]);
+        }
+        let nodes = navEl.querySelectorAll("[data-nav-target]");
+        nodes.forEach(n => {
+            let mdFile = n.getAttribute('data-nav-target');
+            n.onclick = () => this.clickCallBack(mdFile);
+        });
+        this.element.appendChild(navEl);
+    }
+}
