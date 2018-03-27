@@ -135,6 +135,23 @@ For example I had to configure dev-server and sourcemaps correctly to make the p
                 new webpack.HotModuleReplacementPlugin()
             ],
 
+## babel tweaking
+
+As I want to use some ES6-features like `async/await` and maybe `class-properties` which are not supported from babel by default,
+we have to correctly implement some mor babel stuff like `polyfills` and plugins. See the webpack-tweaks here:
+
+    entry: ['@babel/polyfill', './src/js/index.js', './src/scss/custom.scss'],
+    // ...
+                loader: 'babel-loader',
+                options: {
+                    presets: ['@babel/preset-env'],
+                    plugins: ['transform-class-properties']
+                }
+
+To make this work, do not forget to install dependencies: `@babel/polyfill` and `babel-plugin-transform-class-properties`
+
+
+
 ## some thoughts
 
 ### design-thoughts
@@ -166,13 +183,28 @@ Idea is to configure the navi via json:
 so that nav-bar is populated on start, based on this config.
 
 I tried to put this in an own module and make it configurable.
+After some try and error, I finally ended with this kind of usage:
 
-    import navi from './navi/navi.js';
+    import {buildNavigation} from './navi/navi';
     
-            navi({
-                clickCallback: clickOnNavi, 
-                source: './navconfig.json', 
-                el: window.body
-            }).then(f => f.apply());
+            const navigationComponent = buildNavigation({clickCallback: clickOnNavi});
+            navigationComponent.apply();
             
-The `navi()`-Function will return a promise, where then you can call the `apply()`-method, which draws the navi to the DOM.
+The `buildNavigation` Method returns a freezed object `{ apply }` where `apply()` is an
+async function which will fetch navi-configuration and then draws the navi to the DOM.
+
+The method-head from `buildNavigation` looks like this:
+
+    export const buildNavigation = ({  src = '',
+                                el = document.body,
+                                clickCallback = (clickedItem) => {}
+                            }) => { /**/ }
+                            
+Where `src` is a uri to the navigation-config, `el` is the DOM-Element which is the navigation to be appended to, and 
+`clickCallback` is the function which is to be called when someone clicks on a navi-element. 
+ 
+While investigating how to do it right, I found this interesting article about frozen objects,
+which seemed valuable to me as I do not want to make the navigation-"class" changeable.
+The author calls this [Ice-Factory-Pattern](https://medium.freecodecamp.org/elegant-patterns-in-modern-javascript-ice-factory-4161859a0eee).
+
+Now we can proceed with parsing markdown to html in the next chapter....
