@@ -1,15 +1,16 @@
-import navi from './navi/navi.js';
+"use strict";
+
+import {buildNavigation} from './navi/navi';
 
 export class Main {
     static main() {
-        navi({
-            clickCallback: clickOnNavi
-        }).then(f => f.apply());
+        const navigationComponent = buildNavigation({clickCallback: clickOnNavi});
+        navigationComponent.apply();
     }
 }
 
 const clickOnNavi = (item) => {
-    console.log('HELLO ', item);
+    console.log('click on navi item', item);
 };
 
 window.Main = Main;

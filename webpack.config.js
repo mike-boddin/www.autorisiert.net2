@@ -12,7 +12,7 @@ module.exports = {
         // lazy: false,
         // log: 'debug'
     },
-    entry: ['./src/js/index.js', './src/scss/custom.scss'],
+    entry: ['@babel/polyfill', './src/js/index.js', './src/scss/custom.scss'],
     plugins: [
         new CopyWebpackPlugin([
             {from: "src/index.html", to: path.resolve(__dirname, 'dist')},
@@ -30,6 +30,7 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: ['@babel/preset-env'],
+                        plugins: ['transform-class-properties']
                     }
                 }
             },
